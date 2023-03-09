@@ -39,8 +39,8 @@ where first_name IN ('Irena')
 select *
 from employees
 where first_name in ('Irena', 'Vidya', 'Maya')
-	AND gender = 'm'
-	;
+	AND gender = 'm';
+
 select *
 from employees
 where first_name IN ('Irena')
@@ -48,6 +48,13 @@ where first_name IN ('Irena')
 	OR first_name in ('Vidya')
     AND gender = 'm'
     OR first_name in ('Maya')
+    AND gender = 'm';
+    
+select *
+from employees
+where (first_name = 'Irena'
+	OR first_name = 'Vidya'
+    OR first_name = 'Maya')
     AND gender = 'm';
 
 -- Find all unique last names that start with 'E'.
@@ -61,6 +68,9 @@ from employees
 where last_name LIKE 'e%'
 	or last_name LIKE '%e'; 
 
+
+	
+
 -- Find all unique last names that end with E, but does not start with E?
 select *
 from employees
@@ -72,24 +82,29 @@ select *
 from employees
 where last_name LIKE '%e'
 	and last_name LIKE 'e%';
+    
+    -- another way to do it
+    
+select *
+from employees
+where last_name LIKE 'e%e';
 
 -- Find all current or previous employees hired in the 90s. Enter a comment with top three employee numbers. 10008, 10011, 10012
 select *
 from employees
-where hire_date > '1990-01-01'
-	AND hire_date < '1999-12-31';
+where hire_date between '1990-01-01' AND '1999-12-31';
 
 -- Find all current or previous employees born on Christmas. Enter a comment with top three employee numbers. 10050, 10180, 10220
 select *
 from employees
-where hire_date LIKE '%25%';
+where birth_date LIKE '%12-25%';
 
 -- Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with top three employee numbers.
 select *
 from employees
 where hire_date > '1990-01-01'
 	AND hire_date < '1999-12-31'
-    AND hire_date LIKE '%25%';
+    AND birth_date LIKE '%12-25%';
 
 -- Find all unique last names that have a 'q' in their last name.
 select *
@@ -97,7 +112,7 @@ from employees
 where last_name LIKE '%q%';
 
 -- Find all unique last names that have a 'q' in their last name but not 'qu'.
-select *
+select distinct last_name
 from employees
 where last_name LIKE '%q%'
 	and last_name NOT LIKE '%qu%';

@@ -29,8 +29,8 @@ order by last_name ASC, first_name ASC;
 
 /*  5. Write a query to to find all employees whose last name starts and ends with 'E'. 
 Sort the results by their employee number. Enter a comment with the number of employees returned - 899, 
-the first employee number and their first and last name - Ramzi Erde
-, and the last employee number with their first and last name. - Tadahiro Erde
+the first employee number and their first and last name - 10021 Ramzi Erde
+, and the last employee number with their first and last name. - 499648 Tadahiro Erde
 */
 select *
 from employees
@@ -49,10 +49,14 @@ where last_name LIKE '%e'
 	and last_name LIKE 'e%'
 order by hire_date DESC;
 
-/* Find all employees hired in the 90s and born on Christmas. Sort the results so that the oldest employee who was hired last is the first result. Enter a comment with the number of employees returned, the name of the oldest employee who was hired last, and the name of the youngest employee who was hired first. */
+/* Find all employees hired in the 90s and born on Christmas. 
+Sort the results so that the oldest employee who was hired last is the first result. 
+Enter a comment with the number of employees returned 362
+, the name of the oldest employee who was hired last, - BernininKhun
+and the name of the youngest employee who was hired first. Pettis Douadi */
 select *
 from employees
-where hire_date > '1990-01-01'
-	AND hire_date < '1999-12-31'
-    AND hire_date LIKE '%12-25%'
-order by hire_date ASC;
+where hire_date between '1990-01-01'
+	AND '1999-12-31'
+    AND birth_date LIKE '%12-25%'
+order by birth_date, hire_date DESC;
