@@ -23,7 +23,7 @@ group by active;
 show tables;
 
 select emp_no, dept_no, first_name, last_name, from_date, to_date, 
-	if(to_date > curdate(), 1, 0) as with_company
+	if(to_date > curdate(), 1, 0) as is_current_employee
 from employees
 join dept_emp using (emp_no);
 
@@ -41,9 +41,8 @@ from employees;
 -- 3.  How many employees (current or previous) were born in each decade? 
 select count(*),
 	CASE
-		WHEN birth_date like '%195%' THEN 'born_50s'
-        WHEN birth_date like '%196%' THEN 'born_60s'
-        WHEN birth_date like '%197%' THEN 'born_70s'
+		WHEN birth_date like '195%' THEN 'born_50s'
+        WHEN birth_date like '196%' THEN 'born_60s'
 	END AS born_decade
 from employees
 group by born_decade;
@@ -68,21 +67,25 @@ group by ;
 select *
 from salaries;
 
-Select dept_name, dept_group, 
+use employees;
+Select *
 from departments;
 
-SELECT avg(salary),
+SELECT 
 	CASE        
 		WHEN dept_name IN ('research', 'development') THEN 'R&D'
 		WHEN dept_name IN ('sales', 'marketing') THEN 'Sales & Marketing'        
-		WHEN dept_name IN ('Production', 'Quality Management') THEN 'Prod & QM'        
+		WHEN dept_name IN ('Production', 'Quality Management') THEN 'Prod & QM' 
+        WHEN dept_name IN ('Finance', 'Human Resources') THEN 'Finance & HR'
 		ELSE dept_name    
-END AS dept_group 
+	END AS dept_group 
+    , round(avg(salary), 2)
 FROM departments
 join dept_emp using (dept_no)
 join salaries using (emp_no)
-group by dept_group
-;
+where salaries.to_date > now()
+	and dept_emp.to_date > now()
+    group by dept_group;
 
 (select avg(salary) from salaries) as avg_salary,
 
