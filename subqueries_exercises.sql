@@ -12,7 +12,7 @@ where emp_no = '101010';
 select first_name, last_name, hire_date, to_date 
 from employees
 join titles using (emp_no)
-where to_date > now() 
+where to_date > curdate() 
 		and hire_date = (select hire_date
 		from employees 
 		where emp_no = '101010');
@@ -22,10 +22,14 @@ where to_date > now()
 select *
 from titles;
 
-select first_name, last_name, title, to_date
+select title
 from employees
 join titles using (emp_no)
-where first_name = 'Aamod'
+where titles.emp_no IN (select emp_no from employees where first_name = 'Aamod')
+	and titles.to_date > curdate()
+group by title;
+
+/* where first_name = 'Aamod'
 	and to_date in (select to_date
 					from titles
 					where to_date > now());
@@ -36,19 +40,20 @@ where to_date > now();
 
 select first_name
 from employees
-where first_name = 'Aamod';
-
-
+where first_name = 'Aamod'; */
 
 -- 3.  How many people in the employees table are no longer working for the company? Give the answer in a comment in your code. 
-
 
 select count(to_date) -- emp_no, first_name, last_name, to_date
 from employees
 join titles using (emp_no)
 where to_date in (select to_date
 				from titles
-				where to_date < curdate()); -- 203184
+				where to_date < curdate()); -- 203,184
+                
+select count(*) AS PrevEmpCount -- 59,900
+from employees e 
+where emp_no NOT IN (select emp_no from dept_emp where to_date > curdate()); -- 59,900
 
 select *
 from employees;
@@ -56,8 +61,6 @@ from employees;
 select to_date
 from titles
 where to_date < now();
-
-
 
 -- 4.  Find all the current department managers that are female. List their names in a comment in your code. 
 

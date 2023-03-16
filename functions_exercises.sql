@@ -75,5 +75,5 @@ substr(first_name, 1, 1),
 substr(last_name, 1, 4), 
 '_', 
 substr(birth_date, 6, 2),
-substr(birth_date, 3, 2))) as username
+substr(birth_date, 3, 2))) as username,
 from employees;
