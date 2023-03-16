@@ -51,5 +51,8 @@ show create table employees;
 select *
 from employees;
 
+select emp_no, dept_no
+from dept_manager;
+
 
 
