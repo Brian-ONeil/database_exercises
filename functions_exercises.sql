@@ -30,13 +30,21 @@ from employees
 where last_name LIKE '%e'
 	and last_name LIKE 'e%'
 	;
+select CONCAT(first_name, ' ' ,last_name) as full_name
+from employees
+where last_name like 'e%e'
+;  
+
 
 
 -- 3.  Convert the names produced in your last query to all uppercase. 
 select concat(UPPER (first_name), ' ', UPPER(last_name)) as full_name
 from employees
-where last_name LIKE 'e%e'
-	;
+where last_name LIKE 'e%e';
+
+select UPPER( CONCAT(first_name, ' ' ,last_name))  as full_name
+from employees
+where last_name like 'e%e';
 
 -- 4.  Use a function to determine how many results were returned from your previous query. 
 select concat(UPPER (first_name), ' ', UPPER(last_name)) as full_name, 
@@ -46,7 +54,11 @@ where last_name LIKE '%e%'
 select count(first_name)
 from employees
 where last_name LIKE '%e%';
--- 165450
+
+select count(*) -- , count(first_name), count(UPPER( CONCAT(first_name, ' ' ,last_name)))
+from employees
+where last_name like 'e%e'
+; -- 899
 
 -- 5.  Find all employees hired in the 90s and born on Christmas. Use  datediff() function to find how many days
 -- they have been working at the company (Hint: You will also need to use  NOW() or  CURDATE()),
@@ -55,7 +67,10 @@ from employees
 where hire_date LIKE '%199%'
     AND birth_date LIKE '%12-25%';
 
-
+select *, datediff(curdate(), hire_date) as tenure_days
+from employees
+where hire_date like '199%'
+	and birth_date like '%-12-25';
 
 -- 6.  Find the smallest and largest current salary from the  salaries  table. 
 select *
@@ -77,3 +92,15 @@ substr(last_name, 1, 4),
 substr(birth_date, 6, 2),
 substr(birth_date, 3, 2))) as username,
 from employees;
+
+select
+	lower(concat(
+    left(first_name, 1)
+    ,left(last_name,4)
+    ,'_'
+    ,substr(birth_date,6,2)
+    ,substr(birth_date,3,2)
+    )) as username
+    ,date_format(birth_date, '_%m%y') as another_date_retrevial
+from employees
+;

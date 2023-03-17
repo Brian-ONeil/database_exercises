@@ -26,10 +26,19 @@ from titles;
 select distinct(title)
 from titles;  -- total of 7
 
+select count(distinct title)
+from titles
+;
+
 -- 3. Write a query to to find a list of all unique last names of all employees that start and end with  
 -- 'E' using group by.
 select *
 from employees;
+
+select last_name
+from employees
+where last_name like 'e%e'
+group by last_name;
 
 select last_name
 from employees
@@ -47,11 +56,16 @@ group by first_name, last_name; -- dont need distinct because 'group by' is find
 -- 5.  Write a query to find the unique last names with a  'q'  but not  'qu' . Include those names in a 
 -- comment in your sql code. 
 
-select last_name
+select first_name, last_name
 from employees
 where last_name LIKE '%q%'
 	and last_name NOT LIKE '%qu%'
 group by last_name;
+
+select first_name, last_name
+from employees
+where last_name like 'e%e'
+group by first_name, last_name;
 
 -- 6.  Add a COUNT() to your results (the query above) to and the number of employees with the same 
 -- last name. 
@@ -61,6 +75,14 @@ where last_name LIKE '%q%'
 	and last_name NOT LIKE '%qu%'
 group by last_name;
 
+select last_name
+from employees
+where last_name like '%q%'
+	and last_name not like '%qu%'
+group by last_name;
+
+-- Chleq, Lindqvist, Qiwen
+
 -- 7.  Find all all employees with first names  'Irena' ,  'Vidya' , or  'Maya' . Use  COUNT(*)  
 -- and  GROUP BY to find the number of employees for each gender with those names.
 select first_name, gender, count(*)
@@ -68,8 +90,14 @@ from employees
 where first_name in ('Irena', 'Vidya', 'Maya')
 group by first_name, gender; 
 
--- 8.  Using your query that generates a username for all of the employees, generate a count 
--- employees for each unique username. 
+select first_name, gender, count(*)
+from employees
+where first_name IN ('Irena','Vidya','Maya')
+group by first_name, gender
+order by first_name
+;
+
+-- 8.  Using your query that generates a username for all of the employees, generate a count employees for each unique username. 
 select LOWER(concat(
 substr(first_name, 1, 1), 
 substr(last_name, 1, 4), 
@@ -79,6 +107,17 @@ substr(birth_date, 3, 2))) as username,
 COUNT(*)
 from employees
 GROUP BY username;
+
+select
+	lower(concat(
+    left(first_name, 1)
+    ,left(last_name,4)
+    ,'_'
+    ,substr(birth_date,6,2)
+    ,substr(birth_date,3,2)
+    )) as username, count(*)
+from employees
+group by username;
 
 -- 9.  From your previous query, are there any duplicate usernames? Yes 
 -- What is the higest number of times a username shows up? 6
@@ -95,3 +134,16 @@ from employees
 GROUP BY username
 having count(*) > 1
 order by count(*) DESC; -- needed if we have more than 1000 rows in the query
+
+select
+	lower(concat(
+    left(first_name, 1)
+    ,left(last_name,4)
+    ,'_'
+    ,substr(birth_date,6,2)
+    ,substr(birth_date,3,2)
+    )) as username, count(*)
+from employees
+group by username
+having count(*) > 1
+order by count(*) DESC;
