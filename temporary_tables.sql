@@ -32,6 +32,8 @@ JOIN dept_emp USING(emp_no)
 JOIN departments USING(dept_no) 
 WHERE to_date > curdate();
 
+
+
 use pagel_2183;
 
 select *
@@ -62,6 +64,14 @@ DROP COLUMN first_name;
 
 -- d.  What is another way you could have ended up with this same table?
 	-- While creating temp table you can create full_name and not include 	first_name/last_name.
+    
+create temporary table employees_with_departments as (
+select concat(first_name, " ", last_name) as full_name, dept_name
+from employees.employees
+join employees.dept_emp using(emp_no)
+join employees.departments using(dept_no)
+where to_date > curdate()
+);
 
 -- 2.  Create a temporary table based on the  payment  table from the  sakila  database. Write the SQL necessary to transform the  amount  column such that it is stored as an integer representing the number of cents of the payment. For example, 1.99 should become 199. 
 
@@ -87,6 +97,11 @@ SET amounts = amount;
 use pagel_2183;
 select *
 from payment_update;
+
+create temporary table payments as (
+    select payment_id, customer_id, staff_id, rental_id, amount, payment_date, last_update
+    from sakila.payment
+);
 
 -- 3.  Find out how the current average pay in each department compares to the overall current pay for everyone at the company. For this comparison, you will calculate the z-score for each salary. In terms of salary, what is the best department right now to work for? The worst?
 
@@ -141,3 +156,5 @@ from current_info
 order by zscore desc;
 
 select database();
+
+

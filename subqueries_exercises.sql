@@ -16,6 +16,12 @@ where to_date > curdate()
 		and hire_date = (select hire_date
 		from employees 
 		where emp_no = '101010');
+        
+select * 
+from employees e
+JOIN salaries s on s.emp_no = e.emp_no
+where hire_date = (select hire_date from employees where emp_no =101010)
+	and s.to_date > curdate();
 
 -- 2.  Find all the titles ever held by all current employees with the first name Aamod .
 
@@ -42,6 +48,12 @@ select first_name
 from employees
 where first_name = 'Aamod'; */
 
+select t.title from employees e
+join titles t on t.emp_no = e.emp_no
+where t.emp_no IN (select emp_no from employees where first_name = 'Aamod')
+	and t.to_date > curdate()
+group by t.title;
+
 -- 3.  How many people in the employees table are no longer working for the company? Give the answer in a comment in your code. 
 
 select count(to_date) -- emp_no, first_name, last_name, to_date
@@ -49,18 +61,18 @@ from employees
 join titles using (emp_no)
 where to_date in (select to_date
 				from titles
-				where to_date < curdate()); -- 203,184
-                
+				where to_date < curdate()); 
+                                
 select count(*) AS PrevEmpCount -- 59,900
 from employees e 
 where emp_no NOT IN (select emp_no from dept_emp where to_date > curdate()); -- 59,900
 
-select *
+/*select *
 from employees;
 
 select to_date
 from titles
-where to_date < now();
+where to_date < now(); */
 
 -- 4.  Find all the current department managers that are female. List their names in a comment in your code. 
 
@@ -85,6 +97,11 @@ from employees
 join dept_manager using (emp_no)
 where;
 
+select concat(first_name, ' ', last_name) from employees e
+where e.emp_no in (select d.emp_no from dept_manager d
+					join employees e on e.emp_no = d.emp_no
+					where d.to_date > curdate()
+						and gender = 'F');
 
 -- 5.  Find all the employees who currently have a higher salary than the companies overall, historical average salary. 
 
@@ -97,12 +114,14 @@ from salaries) and to_date > curdate();
 select avg(salary) as avg_salary
 from salaries;
 
-
-
+select concat(first_name, ' ', last_name) as EmpName, s.salary from employees e
+	join salaries s on s.emp_no = e.emp_no
+	where s.to_date > curdate()
+		and s.salary > (select avg(salary) from salaries)
 
 -- 6.  How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function to calculate the standard deviation.) What percentage of all salaries is this? 						Hint You will likely use multiple subqueries in a variety of ways 							 							Hint It's a good practice to write out all of the small queries that you can. Add a comment above the query showing the number of rows returned. You will use this number (or the query that produced it) in other, larger queries.
 
-select first_name, last_name, salary, stdv_max_salary
+/* select first_name, last_name, salary, stdv_max_salary
 from employees
 join salaries using (emp_no)
 where salary in ((select stddev(max(salary)), 2)
@@ -115,7 +134,20 @@ select max(salary) from salaries where to_date > curdate();
 
 select * from salaries
 where salary > ((select max(salary) - round(stddev(salary), 2) from salaries where to_date > curdate()) and to_date > curdate()) / (select count(*) from salaries s where s.to_date > curdate())
-)* 100, 2) as pctmaxstd
+)* 100, 2) as pctmaxstd */
 
 select *
 from salary;
+
+select count(*) from salaries s
+where s.salary > (select max(salary) - ROUND(stddev(salary), 2)
+					from salaries where to_date>curdate())
+and s.to_date > curdate();
+
+SELECT ROUND((
+	(select count(*) from salaries s 
+	where s.salary > (select max(salary) - ROUND(stddev(salary), 2) from salaries where to_date>curdate())
+	and s.to_date > curdate()) 
+/ 
+	(select count(*) from salaries s where s.to_date > curdate()) 
+) * 100, 2) AS PctMaxStd;

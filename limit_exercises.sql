@@ -17,7 +17,13 @@ where birth_date LIKE '%12-25%'
 order by hire_date
 Limit 5; -- Alselm, Utz, Bouchung, Baocai, Petter
 
-
+select first_name, last_name
+from employees
+where birth_date like '%12-25'
+	and hire_date like '199%'
+order by hire_date
+limit 5
+; -- Alselm, Utz, Bouchung, Baocai, Petter
 -- Try to think of your results as batches, sets, or pages. The first five results are your first page. The five after that would be your second page, etc. Update the query to find the tenth page of results.
 select *
 from employees
@@ -26,6 +32,13 @@ where birth_date LIKE '%12-25%'
 order by hire_date
 Limit 5 offset 45;
 
--- LIMIT and OFFSET can be used to create multiple pages of data. What is the relationship between OFFSET (number of results to skip), LIMIT (number of results per page), and the page number?alter
+select first_name, last_name
+from employees
+where birth_date like '%12-25'
+	and hire_date like '199%'
+order by hire_date
+limit 5 offset 45;
+
+-- LIMIT and OFFSET can be used to create multiple pages of data. What is the relationship between OFFSET (number of results to skip), LIMIT (number of results per page), and the page number? alter
 
 -- (number of results per page * number of pages) - result of one page

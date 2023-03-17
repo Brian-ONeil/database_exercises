@@ -27,7 +27,7 @@ where first_name in ('Irena', 'Vidya', 'Maya')
 ;
 
 -- Find all current or previous employees with first names 'Irena', 'Vidya', or 'Maya', as in Q2, but use OR instead of IN.
--- What is the employee number of the top three results? Does it match the previous question? 10200, 10397, 10610, yes
+-- What is the employee number of the top three results? 10200, 10397, 10610 Does it match the previous question? 10200, 10397, 10610, yes
 
 select *
 from employees
@@ -99,7 +99,7 @@ select *
 from employees
 where birth_date LIKE '%12-25%';
 
--- Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with top three employee numbers.
+-- Find all current or previous employees hired in the 90s and born on Christmas. Enter a comment with top three employee numbers.10261, 10438, 10681
 select *
 from employees
 where hire_date > '1990-01-01'
